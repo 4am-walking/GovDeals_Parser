@@ -27,6 +27,3 @@ def get_feed():
 def parse_feed(feed):
     for asset in feed["assetSearchResults"]:
         print(asset.get("assetShortDescription"))
-
-
-print(parse_feed(get_feed()))
