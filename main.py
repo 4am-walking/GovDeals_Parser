@@ -1,8 +1,9 @@
 from api import get_feed, parse_feed
-
+from config import args
 
 def main():
-    print(parse_feed(get_feed()))
+    if args.list_all:
+        print(parse_feed(get_feed()))
 
 
 if __name__ == "__main__":

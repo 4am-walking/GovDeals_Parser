@@ -1,6 +1,9 @@
+import argparse
+
 CONFIG = {
-    "get_url": "https://www.govdeals.com/computers-parts-supplies",
+    "get_url": "https://www.govdeals.com/computers-parts-supplies/filters?zipcode=37415&miles=250&pn=1&ps=120",
     "post_url": "https://maestro.lqdt1.com/search/list",
+    "get_url_page_2": "https://www.govdeals.com/computers-parts-supplies/filters?zipcode=37415&miles=250&pn=2&ps=120&so=&sf=bestfit"
 }
 GET_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0",
@@ -24,7 +27,7 @@ POST_HEADERS = {
     "x-api-key": "af93060f-337e-428c-87b8-c74b5837d6cd",
     "x-api-correlation-id": "39197d22-bf35-465d-b778-0761c7f2d7c9",
     "x-ecom-session-id": "c5927321-d817-4cf1-a6d7-fc076cbe0f6d",
-    "x-referer": "https://www.govdeals.com/computers-parts-supplies",
+    "x-referer": "https://www.govdeals.com/computers-parts-supplies/filters?zipcode=37415&miles=250&pn=1&ps=120",
     "x-user-id": "-1",
     "x-page-unique-id": "aHR0cHM6Ly93d3cuZ292ZGVhbHMuY29tL2NvbXB1dGVycy1wYXJ0cy1zdXBwbGllcw=",
     "Ocp-Apim-Subscription-Key": "cf620d1d8f904b5797507dc5fd1fdb80",
@@ -49,10 +52,10 @@ REQUEST_BODY = {
     "makebrand": "",
     "auctionTypeId": None,
     "page": 1,
-    "displayRows": 24,
+    "displayRows": 120,
     "sortField": "bestfit",
     "sortOrder": "desc",
-    "sessionId": "36351545-ad9a-47f6-90e7-f67fa679b78c",
+    "sessionId": "bd8fc3a9-9f2c-479d-992d-f4e7356894ee",
     "requestType": "search",
     "responseStyle": "productsOnly",
     "facets": [
@@ -69,14 +72,23 @@ REQUEST_BODY = {
         "warehouseId",
         "region",
         "currencyTypeCode",
-        "categoryName",
-        "tierId",
+        "countryDesc",
+        "tierId"
     ],
     "facetsFilter": [
-        '{!tag=product_category_external_id}product_category_external_id:"t2"',
-        '{!tag=product_category_external_id}product_category_external_id:"29"',
+        "{!tag=product_category_external_id}product_category_external_id:\"t2\"",
+        "{!tag=product_category_external_id}product_category_external_id:\"29\""
     ],
     "timeType": "",
     "sellerTypeId": None,
     "accountIds": [],
+    "zipcode": "37415",
+    "proximityWithinDistance": "250"
 }
+
+parser = argparse.ArgumentParser(
+    prog = 'GovDeals Parser',
+    description = 'This program parses GovDeals and displays info about products'
+)
+parser.add_argument('--list-all', action='store_true', help='Fetch and list all assets')
+args = parser.parse_args()
