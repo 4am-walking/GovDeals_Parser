@@ -1,4 +1,4 @@
-import json
+from datetime import datetime, timezone
 
 import requests
 
@@ -17,14 +17,14 @@ def get_feed():
         cookies = initial_response.cookies.get_dict()
         session.cookies.update(cookies)
 
-        while True: 
+        while True:
             REQUEST_BODY["page"] = page
             response = session.post(
                 CONFIG["post_url"], headers=POST_HEADERS, json=REQUEST_BODY, timeout=10
             )
             response.raise_for_status()
             data = response.json()
-            asset_search_results = data.get('assetSearchResults', [])
+            asset_search_results = data.get("assetSearchResults", [])
             if asset_search_results is None or len(asset_search_results) == 0:
                 break
             all_results.append(data)
@@ -37,8 +37,28 @@ def get_feed():
         return None
     return all_results
 
+
 def parse_feed(feed):
     for page_data in feed:
         asset_search_results = page_data.get("assetSearchResults", [])
         for asset in asset_search_results:
             print(asset.get("assetShortDescription"))
+
+
+def list_ending_feed(feed):
+    current_time = datetime.now(timezone.utc)
+    current_date = current_time.date()
+
+    for page_data in feed:
+        asset_search_results = page_data.get("assetSearchResults", [])
+        for asset in asset_search_results:
+            asset_end_date_str = asset.get("assetAuctionEndDate")
+            if asset_end_date_str:
+                asset_end_date = datetime.fromisoformat(asset_end_date_str).astimezone(
+                    timezone.utc
+                )
+                if (
+                    asset_end_date.date() == current_date
+                    and asset_end_date > current_time
+                ):
+                    print(asset.get("assetShortDescription"), f"https://www.govdeals.com/asset/{asset.get("assetId")}/{asset.get("accountId")}")
