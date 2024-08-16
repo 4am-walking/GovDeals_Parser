@@ -1,8 +1,9 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import requests
+from tabulate import tabulate
 
-from config import CONFIG, POST_HEADERS, REQUEST_BODY
+from deal.config import CONFIG, POST_HEADERS, REQUEST_BODY
 
 
 def get_feed():
@@ -42,12 +43,15 @@ def parse_feed(feed):
     for page_data in feed:
         asset_search_results = page_data.get("assetSearchResults", [])
         for asset in asset_search_results:
-            print(asset.get("assetShortDescription"))
+           print(asset.get("assetShortDescription"), f"https://www.govdeals.com/asset/{asset.get("assetId")}/{asset.get("accountId")}")
 
 
 def list_ending_feed(feed):
     current_time = datetime.now(timezone.utc)
     current_date = current_time.date()
+
+    table_data = []
+    headers = ["Description", "URL", "Current Bid"]
 
     for page_data in feed:
         asset_search_results = page_data.get("assetSearchResults", [])
@@ -58,7 +62,11 @@ def list_ending_feed(feed):
                     timezone.utc
                 )
                 if (
-                    asset_end_date.date() == current_date
+                    asset_end_date.date() == current_date  or asset_end_date.date() == current_date + timedelta(days=1)
                     and asset_end_date > current_time
                 ):
-                    print(asset.get("assetShortDescription"), f"https://www.govdeals.com/asset/{asset.get("assetId")}/{asset.get("accountId")}")
+                    description = asset.get("assetShortDescription")
+                    url = f"https://www.govdeals.com/asset/{asset.get('assetId')}/{asset.get('accountId')}"
+                    current_bid = asset.get("currentBid")
+                    table_data.append([description, url, current_bid])
+    print(tabulate(table_data, headers=headers, tablefmt="pretty"))

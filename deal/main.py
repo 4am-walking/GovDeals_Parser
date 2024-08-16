@@ -1,5 +1,5 @@
-from api import get_feed, list_ending_feed, parse_feed
-from config import args
+from deal.api import get_feed, list_ending_feed, parse_feed
+from deal.config import args
 
 
 def main():
