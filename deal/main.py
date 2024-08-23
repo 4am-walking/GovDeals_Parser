@@ -1,4 +1,4 @@
-from deal.api import get_feed, list_ending_feed, parse_feed
+from deal.api import get_feed, list_all, list_ending_feed
 from deal.config import args
 
 
@@ -9,7 +9,7 @@ def main():
         )
         return
     if args.list_all:
-        print(parse_feed(get_feed()))
+        print(list_all(get_feed()))
     elif args.end_soon:
         print(list_ending_feed(get_feed()))
 

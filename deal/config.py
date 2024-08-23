@@ -102,5 +102,3 @@ REQUEST_BODY = {
     "zipcode": f"{args.zipcode}",
     "proximityWithinDistance": f"{args.miles}",
 }
-
-print(REQUEST_BODY)
